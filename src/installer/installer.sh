@@ -241,8 +241,8 @@ Please type \"Not reversible!\" without quotes at the prompt to continue:
 	timezone=""
 	if [ -r /etc/timezone ] && [ -r "/usr/share/zoneinfo/$(cat /etc/timezone)" ]; then
 		timezone="$(cat /etc/timezone)"
-	elif [ -L /etc/localtime ] && readlink /etc/localtime | grep -q '^/usr/share/zoneinfo/' && [ -r /etc/localtime ]; then
-		timezone="$(readlink /etc/localtime | sed 's,^/usr/share/zoneinfo/,,')"
+	elif [ -L /etc/localtime ] && readlink -f /etc/localtime | grep -q '^/usr/share/zoneinfo/' && [ -r /etc/localtime ]; then
+		timezone="$(readlink -f /etc/localtime | sed 's,^/usr/share/zoneinfo/,,')"
 	elif [ -r /etc/rc.conf ] && grep -q '^TIMEZONE=.' /etc/rc.conf; then
 		timezone="$(awk -F[=] '$1 == "TIMEZONE" {print$NF}' /etc/rc.conf)"
 	elif [ -r /etc/localtime ]; then
