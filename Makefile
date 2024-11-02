@@ -189,7 +189,7 @@ clean:
 
 $(COMPLETED)/builddir:
 	# Support symlinking build into a tmpfs
-	if [ -h "$(ROOT)/build" ]; then \
+	if [ -L "$(ROOT)/build" ]; then \
 		mkdir -p $$(readlink $(ROOT)/build); \
 	fi; \
 	# build internal directory structure
@@ -909,7 +909,7 @@ $(BUILD)/userland.tar: \
 	done
 	# strip binaries
 	for bin in $(SLASHBR)/bin/* $(SLASHBR)/libexec/*; do \
-		if [ -r "$$bin" ] && ! [ -h "$$bin" ] && head -c4 "$$bin" | grep -q "ELF"; then \
+		if [ -r "$$bin" ] && ! [ -L "$$bin" ] && head -c4 "$$bin" | grep -q "ELF"; then \
 			strip "$$bin"; \
 		fi \
 	done

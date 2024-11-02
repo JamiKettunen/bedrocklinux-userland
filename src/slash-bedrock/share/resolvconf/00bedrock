@@ -17,7 +17,7 @@
 #
 
 # Something already created a /etc/resolv.conf
-if [ -e /etc/resolv.conf ] || [ -h /etc/resolv.conf ]; then
+if [ -e /etc/resolv.conf ] || [ -L /etc/resolv.conf ]; then
 	exit
 fi
 

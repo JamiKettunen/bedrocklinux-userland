@@ -91,7 +91,7 @@ fetch() {
 	step "Configuring"
 	# OpenWrt defaults to /var being a symlink to /tmp.  This makes /var
 	# shared on Bedrock when it should be private.  Disconnect /tmp from /var.
-	if [ -h "${target_dir}/var" ]; then
+	if [ -L "${target_dir}/var" ]; then
 		rm "${target_dir}/var"
 	fi
 	mkdir -p "${target_dir}/var/lock"

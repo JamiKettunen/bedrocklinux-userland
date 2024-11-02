@@ -523,17 +523,17 @@ rm_attr() {
 
 # Checks if argument is an existing stratum
 is_stratum() {
-	[ -d "/bedrock/strata/${1}" ] && ! [ -h "/bedrock/strata/${1}" ]
+	[ -d "/bedrock/strata/${1}" ] && ! [ -L "/bedrock/strata/${1}" ]
 }
 
 # Checks if argument is an existing alias
 is_alias() {
-	[ -h "/bedrock/strata/${1}" ]
+	[ -L "/bedrock/strata/${1}" ]
 }
 
 # Checks if argument is an existing stratum or alias
 is_stratum_or_alias() {
-	[ -d "/bedrock/strata/${1}" ] || [ -h "/bedrock/strata/${1}" ]
+	[ -d "/bedrock/strata/${1}" ] || [ -L "/bedrock/strata/${1}" ]
 }
 
 # Checks if argument is an enabled stratum or alias
@@ -599,7 +599,7 @@ enforce_symlinks() {
 			# This is the desired situation.  Everything is already
 			# setup.
 			continue
-		elif [ -h "${proc_link}" ]; then
+		elif [ -L "${proc_link}" ]; then
 			# The symlink exists but is pointing to the wrong
 			# location.  Fix it.
 			rm -f "${proc_link}"
@@ -608,7 +608,7 @@ enforce_symlinks() {
 			# Nothing exists at the symlink location.  Create it.
 			mkdir -p "$(dirname "${proc_link}")"
 			ln -s "${tgt}" "${proc_link}"
-		elif [ -e "${proc_link}" ] && [ -h "${proc_tgt}" ]; then
+		elif [ -e "${proc_link}" ] && [ -L "${proc_tgt}" ]; then
 			# Non-symlink file exists at symlink location and a
 			# symlink exists at the target location.  Swap them and
 			# ensure the symlink points where we want it to.

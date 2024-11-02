@@ -241,7 +241,7 @@ Please type \"Not reversible!\" without quotes at the prompt to continue:
 	timezone=""
 	if [ -r /etc/timezone ] && [ -r "/usr/share/zoneinfo/$(cat /etc/timezone)" ]; then
 		timezone="$(cat /etc/timezone)"
-	elif [ -h /etc/localtime ] && readlink /etc/localtime | grep -q '^/usr/share/zoneinfo/' && [ -r /etc/localtime ]; then
+	elif [ -L /etc/localtime ] && readlink /etc/localtime | grep -q '^/usr/share/zoneinfo/' && [ -r /etc/localtime ]; then
 		timezone="$(readlink /etc/localtime | sed 's,^/usr/share/zoneinfo/,,')"
 	elif [ -r /etc/rc.conf ] && grep -q '^TIMEZONE=.' /etc/rc.conf; then
 		timezone="$(awk -F[=] '$1 == "TIMEZONE" {print$NF}' /etc/rc.conf)"
@@ -262,7 +262,7 @@ Please type \"Not reversible!\" without quotes at the prompt to continue:
 	# do not respect the Bedrock meta-init at /sbin/init.  Thus we need to
 	# hide the systemd executables.
 	for init in /sbin/init /usr/bin/init /usr/sbin/init /lib/systemd/systemd /usr/lib/systemd/systemd; do
-		if [ -h "${init}" ] || [ -e "${init}" ]; then
+		if [ -L "${init}" ] || [ -e "${init}" ]; then
 			mv "${init}" "${init}-bedrock-backup"
 		fi
 	done
@@ -384,7 +384,7 @@ update() {
 	# Early Bedrock versions used a symlink at /sbin/init, which was found
 	# to be problematic.  Ensure the userland extraction places a real file
 	# at /sbin/init.
-	if ver_cmp_first_newer "0.7.9" "${current_version}" && [ -h /bedrock/strata/bedrock/sbin/init ]; then
+	if ver_cmp_first_newer "0.7.9" "${current_version}" && [ -L /bedrock/strata/bedrock/sbin/init ]; then
 		rm -f /bedrock/strata/bedrock/sbin/init
 	fi
 
@@ -544,7 +544,7 @@ update() {
 	fi
 	if ver_cmp_first_newer "0.7.22beta2" "${current_version}" && \
 			! [ -e /bedrock/strata/bedrock/usr/share/grub ] && \
-			! [ -h /bedrock/strata/bedrock/usr/share/grub ]; then
+			! [ -L /bedrock/strata/bedrock/usr/share/grub ]; then
 		ln -s /bedrock/strata/hijacked/usr/share/grub /bedrock/strata/bedrock/usr/share/grub
 	fi
 	if ver_cmp_first_newer "0.7.23beta2" "${current_version}"; then

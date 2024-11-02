@@ -101,7 +101,7 @@ ensure_essential_environment() {
 	# stacks) during a reboot.  To avoid this, remove /etc/resolv.conf
 	# symlinks here.  Network software should re-recreate this file as
 	# needed.
-	if [ -h /etc/resolv.conf ]; then
+	if [ -L /etc/resolv.conf ]; then
 		rm /etc/resolv.conf
 	fi
 }
@@ -133,7 +133,7 @@ complete_hijack() {
 			;;
 		esac
 		if [ -e "/bedrock/strata/${hijacked}${global}" ] ||
-			[ -h "/bedrock/strata/${hijacked}${global}" ]; then
+			[ -L "/bedrock/strata/${hijacked}${global}" ]; then
 			mkdir -p "$(dirname "${global}")"
 			mv "/bedrock/strata/${hijacked}${global}" "${global}"
 			mkdir -p "/bedrock/strata/${hijacked}${global}"
@@ -144,7 +144,7 @@ complete_hijack() {
 	for global in $(cfg_values "global" "etc"); do
 		mkdir -p "$(dirname "/etc/${global}")"
 		if [ -e "/bedrock/strata/${hijacked}/etc/${global}" ] ||
-			[ -h "/bedrock/strata/${hijacked}/etc/${global}" ]; then
+			[ -L "/bedrock/strata/${hijacked}/etc/${global}" ]; then
 			mv "/bedrock/strata/${hijacked}/etc/${global}" "/etc/${global}"
 		fi
 	done
@@ -169,7 +169,7 @@ complete_hijack() {
 	step "Restoring ${color_term}hijacked${color_norm} init systems"
 	prefix="/bedrock/strata/${hijacked}"
 	for init in /bin/init /sbin/init /usr/bin/init /usr/sbin/init /lib/systemd/systemd /usr/lib/systemd/systemd; do
-		if [ -h "${prefix}${init}-bedrock-backup" ] || [ -e "${prefix}${init}-bedrock-backup" ]; then
+		if [ -L "${prefix}${init}-bedrock-backup" ] || [ -e "${prefix}${init}-bedrock-backup" ]; then
 			mv "${prefix}${init}-bedrock-backup" "${prefix}${init}"
 		fi
 	done

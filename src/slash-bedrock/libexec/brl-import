@@ -184,7 +184,7 @@ case "${src}" in
 	partition_count="$(echo "${partitions}" | wc -l)"
 	for partition in ${partitions}; do
 		if mount_partition "${partition}" "${image}" "${mnt}"; then
-			if [ -e "${mnt}/etc/os-release" ] || [ -h "${mnt}/etc/os-release" ]; then
+			if [ -e "${mnt}/etc/os-release" ] || [ -L "${mnt}/etc/os-release" ]; then
 				echo "${partition}" >> "${tmp}/likely-root-partition"
 			fi
 			umount "${mnt}"
