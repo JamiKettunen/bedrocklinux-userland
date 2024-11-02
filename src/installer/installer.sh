@@ -270,7 +270,7 @@ Please type \"Not reversible!\" without quotes at the prompt to continue:
 	step "Extracting ${color_file}/bedrock${color_norm}"
 	extract_tarball | (
 		cd /
-		tar xf -
+		tar xPf -
 	)
 	extract_tarball | tar tf - | grep -v bedrock.conf | sort >/bedrock/var/bedrock-files
 
@@ -401,7 +401,7 @@ update() {
 	step "Installing new files and updating existing ones"
 	extract_tarball | (
 		cd /
-		/bedrock/bin/strat bedrock /bedrock/libexec/busybox tar xf -
+		/bedrock/bin/strat bedrock /bedrock/libexec/busybox tar xPf -
 	)
 	/bedrock/libexec/setcap cap_sys_chroot=ep /bedrock/bin/strat
 
