@@ -55,7 +55,8 @@ extract_tarball() {
 	# Since the tarball is a binary, it can end in a non-newline character.
 	# To ensure the END marker is on its own line, a newline is appended to
 	# the tarball.  The `head -c -1` here strips it.
-	tail -n "$((lines_tarball + lines_after))" "${0}" | head -n "${lines_tarball}" | head -c -1 | gzip -d
+	tarball_bytes=$(tail -n "$((lines_tarball + lines_after))" "${0}" | head -n "${lines_tarball}" | wc -c)
+	tail -n "$((lines_tarball + lines_after))" "${0}" | head -n "${lines_tarball}" | head -c $((tarball_bytes-1)) | gzip -d
 }
 
 sanity_check_grub_mkrelpath() {
